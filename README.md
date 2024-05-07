@@ -2,6 +2,13 @@
 
 The `SearchAddress` component provides a flexible and interactive search interface for addresses, utilizing the powerful Nominatim service from OpenStreetMap. This component is built with React and integrates UI components from `shadcn-ui` and icons from `lucide-react`.
 
+## Screenshots
+
+<p align="center">
+  <img src="./public/images/data.png" width="400" alt="screenshot 1"/>
+  <img src="./public/images/search.png" width="400" alt="screenshot 2"/>
+</p>
+
 ## Features
 
 - **Autocomplete Search**: Offers suggestions as you type, reducing the need for full address inputs and improving user experience.
@@ -55,7 +62,11 @@ Copy the component file into your project:
    function App() {
      return (
        <div className="App">
-         <SearchAddress />
+         <SearchAddress onSelectLocation={
+          (location) => {
+            console.log(location);
+          }
+        } />
        </div>
      );
    }

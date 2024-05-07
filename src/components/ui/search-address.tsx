@@ -49,7 +49,12 @@ interface Address {
   town: string;
 }
 
-const SearchAddress: React.FC = () => {
+interface SearchAddressProps {
+  onSelectLocation: (item: OSMap | null) => void;
+}
+const SearchAddress: React.FC<SearchAddressProps> = ({
+  onSelectLocation
+}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Record<string, OSMap[]>>({});
   const [loading, setLoading] = React.useState(false);
@@ -154,6 +159,7 @@ const SearchAddress: React.FC = () => {
                         );
                         setValue(currentValue === value ? "" : currentValue);
                         setSelectedItem(item ?? null);
+                        onSelectLocation(item ?? null);
                         setOpen(false);
                       }}
                     >
