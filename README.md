@@ -1,29 +1,82 @@
-# Create T3 App
+# SearchAddress Component
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+The `SearchAddress` component provides a flexible and interactive search interface for addresses, utilizing the powerful Nominatim service from OpenStreetMap. This component is built with React and integrates UI components from `shadcn-ui` and icons from `lucide-react`.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Autocomplete Search**: Offers suggestions as you type, reducing the need for full address inputs and improving user experience.
+- **Grouped Results**: Displays search results grouped by address type, making it easier to find the exact location.
+- **Interactive UI**: Uses a popover to display search results that can be selected via click or touch interaction.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Installation
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Dependencies
 
-## Learn More
+First, ensure that `shadcn-ui` components are added to your project. If not already installed, you can add them using the following command:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```bash
+npx shadcn-ui@latest add button command popover
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Additionally, install `lucide-react` for using icons:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```bash
+npm install lucide-react
+```
 
-## How do I deploy this?
+Or using yarn:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+yarn add lucide-react
+```
+
+### Component File
+
+Copy the component file into your project:
+
+1. Download or copy the file `search-address.tsx` from the repository.
+2. Place the file in your project directory, typically under `components/ui/`.
+
+## Usage
+
+1. **Import the Component**:
+
+   Include the `SearchAddress` component in your React application by importing it:
+
+   ```javascript
+   import SearchAddress from "@/components/ui/search-address";
+   ```
+
+2. **Utilize the Component**:
+
+   You can use the `SearchAddress` component anywhere within your React application:
+
+   ```jsx
+   function App() {
+     return (
+       <div className="App">
+         <SearchAddress />
+       </div>
+     );
+   }
+   ```
+
+## Component Dependencies
+
+This component relies on the following external libraries and styles:
+
+- `shadcn-ui` for UI components such as Button, Command, and Popover.
+- `lucide-react` for icons like `Check` and `ChevronsUpDown`.
+
+## API Configuration
+
+The component makes requests to the `https://nominatim.openstreetmap.org/search` endpoint. Ensure that any API usage complies with the [Nominatim usage policy](https://operations.osmfoundation.org/policies/nominatim/), particularly regarding the custom HTTP header requirements for identification.
+
+
+## Contributing
+
+Contributions to enhance or fix issues in the `SearchAddress` component are welcome. Please follow the standard pull request process for this repository.
+
+## License
+
+This component is available under the MIT License. See the LICENSE file in the repository for full license text.
