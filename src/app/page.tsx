@@ -1,6 +1,8 @@
 "use client";
-import SearchAddress from "@/components/ui/search-address";
-import Link from "next/link";
+import dynamic from "next/dynamic";
+const SearchAddress = dynamic(() => import("@/components/ui/search-address"), {
+  ssr: false,
+});
 
 export default function HomePage() {
   return (
