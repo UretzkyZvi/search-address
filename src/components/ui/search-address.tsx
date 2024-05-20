@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client";;
+import React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -18,100 +18,26 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CommandLoading } from "cmdk";
+import { RawResult } from "leaflet-geosearch/dist/providers/bingProvider.js";
+import { SearchResult } from "leaflet-geosearch/dist/providers/provider.js";
+import { useSearchAddress } from "@/hooks/use-search-address";
 
-interface OSMap {
-  place_id: number;
-  licence: string;
-  osm_type: string;
-  osm_id: number;
-  lat: string;
-  lon: string;
-  class: string;
-  type: string;
-  place_rank: number;
-  importance: number;
-  addresstype: string;
-  name: string;
-  display_name: string;
-  address: Address;
-  boundingbox: string[];
-}
-
-interface Address {
-  municipality: string;
-  state: string;
-  "ISO3166-2-lvl4": string;
-  country: string;
-  country_code: string;
-  postcode: string;
-  road: string;
-  house_number: string;
-  town: string;
-}
 
 interface SearchAddressProps {
-  onSelectLocation: (item: OSMap | null) => void;
+  onSelectLocation: (item: SearchResult<RawResult> | null) => void;
 }
-const SearchAddress: React.FC<SearchAddressProps> = ({
-  onSelectLocation
-}) => {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Record<string, OSMap[]>>({});
-  const [loading, setLoading] = React.useState(false);
+const SearchAddress: React.FC<SearchAddressProps> = ({ onSelectLocation }) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const [selectedItem, setSelectedItem] = useState<OSMap | null>(null);
 
-  const groupByType = (data: OSMap[]): Record<string, OSMap[]> => {
-    return data.reduce(
-      (acc, item) => {
-        const { type } = item;
-        if (!acc[type]) {
-          acc[type] = [];
-        }
-        acc[type]?.push(item);
-        return acc;
-      },
-      {} as Record<string, OSMap[]>,
-    );
-  };
-
-  const handleSearch = async (value: string) => {
-    setQuery(value);
-    setLoading(true);
-    if (value.length > 2) {
-      setTimeout(() => {
-        const response = fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${value}&addressdetails=1&layer=address&dedupe=1&limit=5&accept-language=en`,
-        );
-        response
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response;
-          })
-          .then((response) => response.json())
-          .then((data: OSMap[]) => {
-            if (Array.isArray(data)) {
-              setResults(groupByType(data));
-              setLoading(false);
-            } else {
-              setResults({}); // Handle cases where data is not as expected
-            }
-          })
-          .catch((error) => {
-            console.error(
-              "There was a problem with your fetch operation:",
-              error,
-            );
-            setResults({});
-          });
-      }, 300);
-    } else {
-      setResults({});
-    }
-  };
+  const {
+    query,
+    results,
+    loading,
+    handleSearch,
+    selectedItem,
+    setSelectedItem,
+  } = useSearchAddress();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -124,7 +50,7 @@ const SearchAddress: React.FC<SearchAddressProps> = ({
         >
           <p className="truncate">
             {selectedItem
-              ? `${selectedItem.display_name} (${selectedItem.type})`
+              ? `${selectedItem.label} (${selectedItem.raw.entityType})`
               : "Select place..."}
           </p>
 
@@ -152,10 +78,10 @@ const SearchAddress: React.FC<SearchAddressProps> = ({
                   {items.map((item, index) => (
                     <CommandItem
                       key={index}
-                      value={item.display_name}
+                      value={item.label}
                       onSelect={(currentValue: string) => {
                         const item = results[type]?.find(
-                          (item) => item.display_name === currentValue,
+                          (item) => item.label === currentValue,
                         );
                         setValue(currentValue === value ? "" : currentValue);
                         setSelectedItem(item ?? null);
@@ -166,12 +92,10 @@ const SearchAddress: React.FC<SearchAddressProps> = ({
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value === item.display_name
-                            ? "opacity-100"
-                            : "opacity-0",
+                          value === item.label ? "opacity-100" : "opacity-0",
                         )}
                       />
-                      {item.display_name}
+                      {item.label}
                     </CommandItem>
                   ))}
                 </CommandGroup>
