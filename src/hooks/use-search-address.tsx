@@ -23,7 +23,7 @@ export const useSearchAddress = (): UseSearchAddressResult => {
     useState<SearchResult<RawResult> | null>(null);
 
   const debouncedQuery = useDebounce(query, 500);
-
+ 
   const groupByType = useCallback(
     (data: SearchResult<RawResult>[]): Record<string, SearchResult<RawResult>[]> => {
       return data.reduce(
